@@ -1,0 +1,4 @@
+"0","# histogram"
+"0","hist(xsim, freq = FALSE)"
+"2","Error: object 'xsim' not found
+"

@@ -1,0 +1,58 @@
+---
+title: 'Testløb'
+output: pdf_document
+---
+
+## Et Dokument med tekst og R beregninger
+
+Ved hjælp af R markdown er det muligt, at blande tekst og R beregninger.
+I sådan et dokument kan du endda skrive matematiske formler:
+$\alpha^2 + \beta^2 = \gamma^2$.
+
+Med koden nedenunder laves en lille simulationseksperiment. Vi simulerer
+1000 realiseringer af standardnormalfordelingen og tegner et histogram.
+Så beregner vi medianen og integner en vertikal linje i blå, der
+markerer medianen:
+
+```{r}
+# simulerer og gemmer tallene i variablen xsim
+xsim <- rnorm(1000, mean = 0, sd = 1)
+
+# plotter histogrammet
+hist(xsim)
+
+# beregner medianen, og gemmer resultaterne under navnet x_med
+x_med <- median(xsim)
+
+# tilfojer en blaa vertikal linje gennem medianen
+abline(v = x_med, col = "blue")
+
+```
+
+Når du kigger nærmere på ovenstående histogram, ser du, at søjlernes
+højde svarer til antallet i intervallet for hver søjle. For at kunne
+sammenligne histogrammet med den teoretiske fordeling, skal der tilføjes
+et argument `freq = FALSE` i kaldet til funktionen `hist`. Så kan vi
+indtegne kurven af $N(0,1)$ fordelingen ved R-funktionen `curve`.
+
+```{r}
+# histogram og vertikal linje gennem medianen
+hist(xsim, freq = FALSE)
+abline(v = x_med, col = "blue")
+
+# tilfoj kurven af taethedsfunktionen
+curve(dnorm(x, mean = 0, sd = 1), add = TRUE, col = "red")
+```
+
+Når vi ønsker at sammenholde histogrammet af observerede data med en
+normalfordelingskurve på samme måde, som vi har gjort ovenover, så kan
+vi erstatte de teoretiske værdier for middelværdi og standardafvigelse
+med empiriske værdier beregnet fra data, altså
+
+```{r}
+# histogram
+hist(xsim, freq = FALSE)
+
+# taethedsfunktionen af tilpasset normalfordeling
+curve(dnorm(x, mean = mean(xsim), sd = sd(xsim)), add = TRUE, col = "purple")
+```

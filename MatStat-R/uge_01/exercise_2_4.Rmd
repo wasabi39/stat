@@ -1,0 +1,43 @@
+---
+title: "Exercise 2.4"
+output: pdf_document
+date: "2024-02-05"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Delopgave 1
+
+Lav en tabel og et søjlediagram over variablen Recid.
+
+```{r cars}
+library(resampledata3)
+table(Recidivism$Recid)
+barplot(table(Recidivism$Recid), col="skyblue", ylab="Count", xlab="Yes/No", ylim=c(0,15000))
+```
+## Delopgave 2
+
+Lav en kontingenstabel, der opsummerer sammenhængen mellem recidiv (Recid) efter alder (Age25). Af dem under 25 år, hvor stor en andel blev sendt tilbage i fængsel? Af dem over 25 år alder, hvor stor var her andelen af genfængslede?
+
+```{r cars2}
+recidivism_by_age <-table(Recidivism$Age25, Recidivism$Recid)
+recidivism_by_age
+recidivism_by_age[2,1] / (recidivism_by_age[2,1] + recidivism_by_age[2,2])
+recidivism_by_age[1,1] / (recidivism_by_age[1,1] + recidivism_by_age[1,2])
+
+```
+
+
+
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

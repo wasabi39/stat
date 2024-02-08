@@ -1,0 +1,92 @@
+---
+title: "Analyse af spruce datasættet"
+author: "Benjamin Waziri"
+date: "Februar 2024"
+output:
+  pdf_document: default
+documentclass: article
+classoption: a4paper
+---
+
+## Spruce datasættet
+
+<!-- Beskriv gerne ganske kort datasættet. Var det et eksperiment? Hvad undersøges? -->
+
+Datasættet er fra et eksperiment fra 90'erne, hvori en biolog plantede 72 træer under forskellige forhold (med/uden gødning, med/uden konkurrence), og målte træernes højde og diameter henover en periode på 5 år.
+
+<!-- Angiv så den kode som du bruger til at indlæse data, indenfor en R code chunk -->
+Data indlæses som følger:
+```{r}
+library(resampledata3)
+```
+
+<!-- nu til delopgaverne -->
+### a) Numeriske deskriptorer, højdevækst
+Vi beregner, det opgaven beder os om:
+```{r}
+summary(Spruce$Ht.change)
+summary(Spruce$Di.change)
+sd(Spruce$Ht.change)
+sd(Spruce$Di.change)
+
+```
+
+
+<!-- 
+Compute the numeric summaries for the height changes (Ht.change) of the seedlings.
+Uddybende:
+Beregn de numeriske deskriptorer (summary statistics), og beregn også standardafvigelsen. 
+Kan man formode noget om formen af fordelingen ved at betragte deskriptorerne - er den symmetrisk eller skæv?  
+-->
+Fordelingen lader til at være relativt symmetrisk, da middelværdierne ligger tæt på medianerne.
+
+### b) Histogram og normalfraktilplot, højdevækst
+
+<!-- 
+Create a histogram and normal quantile plot for the height changes of the seedlings. Is the distribution approximately normal?
+Husk at besvare spørgsmålet i opgaven: er fordelingen tilnærmelsesvis normal? Hvad mener du? 
+-->
+
+```{r}
+hist(Spruce$Ht.change, breaks=30)
+qqnorm(Spruce$Ht.change)
+qqline(Spruce$Ht.change)
+```
+Fordelingen er tilnærmelsesvis normal, da punkterne i vores QQ-plot tilnærmelsesvist ligger på en lige linje. Fordelingen afviger lidt fra en normalfordeling, dog er det grundet den lave sample size helt forventeligt.
+
+### c) Grafisk sammenligning af væksten i diameter, med og uden gødning 
+
+<!-- 
+Create a boxplot to compare the distribution of the change in diameters of the seedlings (Di.change) grouped by whether or not they were in fertilized plots.
+Uddyb:
+Kommenter lidt på resultaterne. Påvirker gødning væksten? Har fordelingerne i de to grupper den samme form? 
+-->
+```{r}
+boxplot(Spruce$Di.change ~ Spruce$Fertilizer, data = Spruce$seedlings)
+```
+Her ses tydeligt, at gødning øger væksten. Der er en lille forskel i fordelingerne i form af, at medianen ligger meget tæt på Q1 i fordelingen for de træer, der modtog gødning. Det kunne tyde på en lidt skæv fordeling.
+
+
+### d) Numerisk sammenligning af væksten i diameter, med og uden gødning 
+
+<!-- 
+Use the tapply command to find the numeric summaries of the diameter changes for the two levels.
+Uddyb:
+Kommer du til de samme konklusioner som i c)? 
+-->
+
+```{r}
+diameter_summary <- tapply(Spruce$Di.change, Spruce$Fertilizer, summary)
+diameter_summary
+```
+Her ses en langt større forskel på median og middelværdi hos de gødede træer end hos de ikke-gødede, hvilke understøtter, at de gødede træer har en lidt skæv fordeling.
+
+### e) Sammenhæng mellem væksten i højde og væksten i diameter
+
+<!-- 
+Create a scatter plot of the height changes against the diameter changes, and describe the relationship.
+Husk gerne at kommentere på sammenhæng mellem vækst i diameter og vækst i højde. -->
+```{r}
+plot(Spruce$Ht.change, Spruce$Di.change)
+```
+Her ses en lineær positiv korrelation mellem forandringer i højde og forandringer i diameter. 
